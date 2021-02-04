@@ -53,7 +53,7 @@ class Bot():
         element_types = ['button', 'div', 'input', 'a', 'label']
         
         for element_type in element_types:
-            btns = self.driver.fund_elements_by_xpath(f'//{element_type}')
+            btns = self.driver.find_elements_by_xpath(f'//{element_type}')
             # for btn in btns:
             #   print(btn.text)
 
