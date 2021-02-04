@@ -1,7 +1,6 @@
 # Start with imports 
 
-import json
-from selenium import webdriver  
+import json 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as expected_conditions
@@ -12,9 +11,19 @@ import random
 import re
 import subprocess, os
 import urllib.request
-
+import sys
+import boto3
+from botocore.exceptions import ClientError
+from selenium import webdriver 
 import time
 
+s3 = boto3.resource("s3").Bucket("ikea-dataset")
+json.load_s3 = lambda f: json.load(s3.Object(key=f).get()["Body"])
+json.dump_s3 = lambda obj, f: s3.Object(key=f).put(Body=json.dumps(obj))
+client = boto3.client('s3', region_name='us-east-2')
+
+# json.dump_s3(data, "key")  saves json to s3://bucket/key
+# data = json.load_s3("key")  read json from s3://bucket/key
 
 # open_chrome function
 def open_chrome(port=9220, on_mac=True):
@@ -44,7 +53,7 @@ class Bot():
         element_types = ['button', 'div', 'input', 'a', 'label']
         
         for element_type in element_types:
-            btns = self.driver.find_elements_by_xpath(f'//{element_type}')
+            btns = self.driver.fund_elements_by_xpath(f'//{element_type}')
             # for btn in btns:
             #   print(btn.text)
 
@@ -79,7 +88,6 @@ class Bot():
     def toggle_verbose(self):
         self.verbose = not self.verbose
 
-
 if __name__ == '__main__':
     # EXAMPLE USAGE
     bot = Bot()
@@ -87,7 +95,7 @@ if __name__ == '__main__':
     # data_dict = {"plant pots": [], "plates": [], "bin": []}
     data_dict = {}
 
-    searches = {'plates': [], 'plant pots':[], 'bin':[]}
+    searches = {'tableware': [], 'plant pots':[], 'bin':[], 'cookware':[], 'wardrobes':[], 'tables':[], 'cabinets':[], 'clothing racks':[], 'chair':[]}
     
     for search in searches:
         bot.driver.get(f'https://www.ikea.com/gb/en/search/products/?q={search}')
@@ -162,7 +170,7 @@ if __name__ == '__main__':
                     filename = f'dims-{result}-{idx}'
                     file_ext = img_url.split('.')[-1] 
                     file_ext = file_ext[ 0 : 3 ]
-                    urllib.request.urlretrieve(img_url, f'data/{search}/{result}/{filename}.{file_ext}')
+                    # urllib.request.urlretrieve(img_url, f'data/{search}/{result}/{filename}.{file_ext}')
                     results_dict['dims_images'] = f'data/{search}/{result}/{filename}.{file_ext}'
 
 
@@ -221,10 +229,15 @@ if __name__ == '__main__':
                     filename = f'{result}-{idx}'
                     file_ext = img_url.split('.')[-1] 
                     file_ext = file_ext[ 0 : 3 ]
-                    # Write to file
+                    # Write file locally
                     filepath = f'data/{search}/{result}/{filename}.{file_ext}'
                     urllib.request.urlretrieve(img_url, filepath)
+                    # Write to cloud
+                    with open(filepath, 'rb') as data:
+                        s3.upload_fileobj(data, filepath)
                     results_dict['images'].append(filepath)
+                    # remove file locally
+                    os.remove(filepath)
                     
             # Remove duplicate images
             results_dict['images'] = [i for j, i in enumerate(results_dict['images']) if i not in results_dict['images'][:j]] 
@@ -234,9 +247,12 @@ if __name__ == '__main__':
 
             print(results_dict['images'])
 
-            # 
+    
             with open('data_json.txt', 'w') as json_file:
                 json.dump(data_dict, json_file)
             
-            
+            json.dump_s3(data_dict, "data_json")
 
+
+
+        
