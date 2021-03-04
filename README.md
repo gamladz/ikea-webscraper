@@ -1,6 +1,30 @@
 # ikea web-scraper
 
 This file contains the source code to scrape product information from ikeas website
+built wth selenium.
+
+# Schema
+
+```
+            results_dict = {
+                "id": [],
+                "query":[]
+                "url":[],
+                "source":[],
+                "name": [],
+                "price": [],
+                "description": [],
+                "dims_image": [],
+                "dimensions": [],
+                "packaging": [],
+                "details": [],
+                "sustainability": [],
+                "images":[],
+                "materials":[]
+            }
+```
+
+This file contains the source code to scrape product information from ikeas website
 
 ## Installation
 To get started make sure you are running python3. The script writes a data file
