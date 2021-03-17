@@ -3,6 +3,8 @@
 This file contains the source code to scrape product information from ikeas website
 built wth selenium.
 
+![alt text](https://media.giphy.com/media/TIISk5oX45MpBHlVFn/giphy.gif)
+
 
 
 # Schema
