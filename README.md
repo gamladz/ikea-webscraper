@@ -12,37 +12,20 @@ built wth selenium.
 ```
             results_dict = {
                 "id": [],
-                "query":[]
                 "url":[],
-                "source":[],
-                "name": [],
                 "price": [],
                 "description": [],
-                "dims_image": [],
-                "dimensions": [],
-                "packaging": [],
-                "details": [],
-                "sustainability": [],
                 "images":[],
-                "materials":[]
+                "Source":[]
             }
 ```
 The project collects the following pieces of information 
 
 1. URL - e.g. https://www.ikea.com/gb/en/p/muskot-plant-pot-white-30308201/
-2. Query - e.g. This is the search term. 'Plant+Pots'
-3. Source - e.g. IKEA Website
-4. Name - e.g. MUSKOT
-5. Price - e.g. £1.5
-6. Description e.g. 'Plant pot, white 9 cm' 
-7. Dims Image - e.g. Schematic or singular image with white background with dimensions
-8. Dimensions -  Dict of length Height and width. e.g {'Length: 11 cm, Weight: 0.39 kg, Diameter: 12 cm, Package(s): 1'}
-9. Packaging - Details of packaging 
-10. Details - e.g. Longer Description 'Decorate your home with plants combined with a plant pot to suit your style.
-May be combined with the other plant pots in the MUSKOT series.'
-11. Sustainabiliity - Any information on recycling or Sustainability
-12. Images - JPG.s of all product images
-13. Materials - Details of materials - 'Earthenware, Pigmented powder coating'
+2. Price - e.g. £1.5
+3. Description e.g. 'Plant pot, white 9 cm' 
+4. Image - e.g. [data/Cabinets_ikea/kallax-shelving-unit-white-80275887/kallax-shelving-unit-white-80275887-x.jpg]
+5. Source - e.g. IKEA
 
 
 
